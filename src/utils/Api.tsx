@@ -117,7 +117,7 @@ export class Api {
 export const api = new Api({
   baseUrl: "https://api.unsplash.com",
   headers: {
-    'Authorization': '',
+    'Authorization': 'Client-ID 5_Thk5UPokkj3LlpG9NE5qt9g1NLCtgyWDtoGjECwi4',
     'Content-Type': 'application/json',
     'Accept-Version': 'v1'
   },
