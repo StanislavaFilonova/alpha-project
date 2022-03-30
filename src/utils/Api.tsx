@@ -20,7 +20,7 @@ export class Api {
    * Метод получения информации о пользователе с сервера 
    */
   getUserInfo() {
-    return fetch(`${this._baseUrl}/users/me`, {
+    return fetch(`${this._baseUrl}/users/stanislavafilonova`, {
       headers: this._headers,
     })
       .then(this._checkResponse)
@@ -30,7 +30,7 @@ export class Api {
    * Метод получения карточек с сервера 
    */
   _getCards() {
-    return fetch(`${this._baseUrl}/cards`, {
+    return fetch(`${this._baseUrl}/photos`, {
       headers: this._headers,
     })
       .then(this._checkResponse)
@@ -52,7 +52,7 @@ export class Api {
       return;
     }
 
-    const url = `${this._baseUrl}/cards`;
+    const url = `${this._baseUrl}/collections/DHvWeKumP80/add`;
     const hdr = this._headers;
     //@ts-ignore: Object is possibly 'undefined'.
     hdr['Content-Type'] = 'application/json';
@@ -60,7 +60,11 @@ export class Api {
     const opts = {
       method: 'POST',
       headers: hdr,
-      body: JSON.stringify(cardData)
+      body: JSON.stringify({
+        title: "Stasya Collection",
+        description: "Stasya First Collection",
+        private: false
+      })
     };
 
     return fetch(url, opts)
@@ -76,7 +80,7 @@ export class Api {
       console.error("Api.deleteCard не передан обязательный аргумент cardId. Запрос не будет выполнен.");
       return;
     }
-    const url = `${this._baseUrl}/cards/${cardId}`;
+    const url = `${this._baseUrl}/photos/${cardId}`;
     const hdr = this._headers;
     //@ts-ignore: Object is possibly 'undefined'.
     hdr['Content-Type'] = 'application/json';
@@ -99,7 +103,7 @@ export class Api {
       return;
     }
 
-    const url = `${this._baseUrl}/cards/likes/${cardId}`;
+    const url = `${this._baseUrl}/photos/${cardId}/like`;
     const opts = {
       method: (like ? 'PUT' : 'DELETE'),
       headers: this._headers
@@ -111,9 +115,10 @@ export class Api {
 }
 
 export const api = new Api({
-  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-30",
+  baseUrl: "https://api.unsplash.com",
   headers: {
-    authorization: "08bc75e7-78fb-46ea-8791-989ceb63ff7a",
-    'Content-Type': 'application/json'
-  }
-})
+    'Authorization': '',
+    'Content-Type': 'application/json',
+    'Accept-Version': 'v1'
+  },
+});

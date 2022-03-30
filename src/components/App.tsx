@@ -5,37 +5,31 @@ import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import {api} from "../utils/Api";
 import CurrentUserContext from "../contexts/CurrentUserContext";
-import AddPlacePopup from "./AddPlacePopup";
 import DeleteCardPopup from "./DeleteCardPopup";
 
 //---------------------------------------------------------------------------------------------------------------------
 
 function App() {
     //Создаем хуки, управляющие внутренним состоянием.
-    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
     const [isDeleteCardPopup, setIsDeleteCardPopup] = React.useState(false);
 
     const [selectedCard, setSelectedCard] = React.useState({
-        link: "",
-        name: "",
+        urls: {
+            regular: ""
+        },
+        alt_description: "",
     });
     const [currentUser, setCurrentUser] = React.useState({});
 
-    const [cards, setCards] = React.useState([]);
+    const [cards, setCards] = React.useState([] as any);
     const [cardDelete, setCardDelete] = React.useState({});
 
-    const [placePopupButtonText, setPlacePopupButtonText] =
-        React.useState("Создать");
     const [removePopupButtonText, setRemovePopupButtonText] =
         React.useState("Да");
 
     //---------------------------------------------------------------------------------------------------------------------
 
     //Создание обработчика события, который изменяет внутренне состояние
-
-    function handleAddPlaceClick() {
-        setIsAddPlacePopupOpen(true);
-    }
 
     function handleCardClick(card) {
         setSelectedCard(card);
@@ -48,10 +42,19 @@ function App() {
 
     //Функция закрытия всех попапов
     function closeAllPopups() {
-        setIsAddPlacePopupOpen(false);
         setIsDeleteCardPopup(false);
-        setCardDelete({ link: "", name: "" });
-        setSelectedCard({ link: "", name: "" });
+        setCardDelete({
+            urls: {
+                regular: ""
+            },
+            alt_description: ""
+        });
+        setSelectedCard({
+            urls: {
+                regular: ""
+            },
+            alt_description: ""
+        });
     }
 
     //---------------------------------------------------------------------------------------------------------------------
@@ -117,14 +120,13 @@ function App() {
     //---------------------------------------------------------------------------------------------------------------------
     // Установка лайка карточкам
     function handleCardLike(card) {
-        // Ввод переменной, где мы проверяем при помощи метода some, удовлетворяет ли какой-либо элемент массива условию, заданному в передаваемой функции.
-        const isLiked = card.likes.some((like: any, currentUser: any) => like._id === currentUser._id);
-        // @ts-ignore: Object is possibly 'undefined'.
-        api.changeLike(card._id, !isLiked)
+        //const isLiked = card.likes.some((like) => like._id === like.liked_by_user);
+                // @ts-ignore: Object is possibly 'undefined'.
+        api.changeLike(card.id, !card.liked_by_user)
             .then((res: any) => {
                 setCards((condition: any) =>
                     condition.map((currentCard: any) =>
-                        currentCard._id === card._id ? res : currentCard
+                        currentCard.id === card.id ? res : currentCard
                     )
                 );
             })
@@ -138,10 +140,10 @@ function App() {
         setRemovePopupButtonText("Удаление...");
         // Исключаем из массива удаленную карточку
         // @ts-ignore: Object is possibly 'undefined'.
-        api.deleteCard(card._id)
+        api.deleteCard(card.id)
             .then(() => {
                 const newCards = cards.filter(
-                    (currentCard: any) => currentCard._id !== card._id
+                    (currentCard: any) => currentCard.id !== card.id
                 );
                 // Обновляем состояние
                 setCards(newCards);
@@ -155,23 +157,6 @@ function App() {
             })
     }
 
-    // Функция добавления места
-    function handleAddPlaceSubmit(cardNew) {
-        setPlacePopupButtonText("Добавление...");
-        // @ts-ignore: Object is possibly 'undefined'.
-        api.addCard(cardNew)
-            .then((res: never) => {
-                setCards([res, ...cards]);
-                closeAllPopups();
-            })
-            .catch((err: any) => {
-                console.log(err);
-            })
-            .finally(() => {
-                setPlacePopupButtonText("Создать");
-            })
-    }
-
     //---------------------------------------------------------------------------------------------------------------------
     return (
         <div className="page">
@@ -180,20 +165,12 @@ function App() {
                 {/*текущее значение контекста из ближайшего подходящего Provider выше в дереве компонентов.*/}
                 <Header />
                 <Main
-                    onAddPlace={handleAddPlaceClick}
                     onCardClick={handleCardClick}
                     onCardLike={handleCardLike}
                     onCardDelete={handleCardDeleteClick}
                     cards={cards}
                 />
                 <Footer />
-
-                <AddPlacePopup
-                    isOpen={isAddPlacePopupOpen}
-                    onClose={closeAllPopups}
-                    buttonSubmitText={placePopupButtonText}
-                    onAddPlace={handleAddPlaceSubmit}
-                />
 
                 <DeleteCardPopup
                     isOpen={isDeleteCardPopup}
