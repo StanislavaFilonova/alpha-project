@@ -1,0 +1,11 @@
+.popup__wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 282px;
+}
+
+@media (min-width: 1024px) {
+  .popup__wrapper {
+    max-width: 430px;
+  }
+}
