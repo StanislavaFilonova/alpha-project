@@ -43,3 +43,5 @@
 Создает оптимизированную версию приложения и размещает ее на GitHub Pages по адресу, указанному в параметре homepage файла package.json.
 
 ### Ссылка на проект
+
+<https://stanislavafilonova.github.io/alpha-project/>

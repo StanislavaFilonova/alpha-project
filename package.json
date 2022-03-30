@@ -1,5 +1,5 @@
 {
-  "name": "mesto-react",
+  "name": "alpha-project",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -46,5 +46,10 @@
   "devDependencies": {
     "gh-pages": "^3.2.3"
   },
-  "homepage": "."
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StanislavaFilonova/alpha-project.git"
+  },
+  "author": "Stanislava Filonova",
+  "homepage": "https://github.com/StanislavaFilonova/alpha-project#readme"
 }
